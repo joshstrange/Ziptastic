@@ -123,7 +123,7 @@ $app->get('/:zip', function ($zip) {
         $db = new PDO('sqlite:zipcodes.db');
 
         $result = $db->query("SELECT country,state,city FROM zipcodes WHERE zipcode='$zip' LIMIT 1");
-        print_r($result);
+        print_r($result->fetch(PDO::FETCH_ASSOC));
 
         // close the database connection
         $db = NULL;
