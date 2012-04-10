@@ -93,7 +93,7 @@ $app->get('/', function () {
             </header>
             <h1>Ziptastic API</h1>
             <p>
-                Ziptastic API is a super easy to use API that returns the Country, State, City of the ip code you supply. The Ziptastic API was created by <a href="https://github.com/daspecster">Thomas Schultz</a> and then I (<a href="http://github.com/joshstrange">Josh Strange</a>) re-wrote parts of it in PHP using the <a href="http://www.slimframework.com/">SLIM framework</a>.
+                Ziptastic API is a super easy to use API that returns the Country, State, City of the ip code you supply. The Ziptastic API was created by <a href="http://github.com/daspecster">Thomas Schultz</a> and then I (<a href="http://github.com/joshstrange">Josh Strange</a>) re-wrote parts of it in PHP using the <a href="http://www.slimframework.com/">SLIM framework</a> and hosted it here.
             </p>
             <section>
                 <h2>Get Started</h2>
@@ -112,7 +112,17 @@ EOT;
 
 //Zip route
 $app->get('/:zip', function ($zip) {
-   echo $zip;
+    if(!is_numeric($zip))
+        die(json_encode(array('error' => 'Not a valid Zip Code!')));
+    $db = new SQLiteDatabase('zipcodes.db');
+    $result = $db->query("SELECT country,state,city FROM zipcodes WHERE zipcode='$zip' LIMIT 1");
+    
+    if($info = sqlite_fetch_array($result))
+        die(json_encode(array('error' => 'Zip Code not found!')));
+    else
+    {
+        echo json_encode($info);
+    }
 });
 
 
