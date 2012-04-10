@@ -114,6 +114,28 @@ EOT;
 $app->get('/:zip', function ($zip) {
     if(!is_numeric($zip))
         die(json_encode(array('error' => 'Not a valid Zip Code!')));
+
+
+
+    try
+    {
+        //open the database
+        $db = new PDO('sqlite:zipcodes.db');
+
+        $result = $db->query("SELECT country,state,city FROM zipcodes WHERE zipcode='$zip' LIMIT 1");
+        print_r($result);
+
+        // close the database connection
+        $db = NULL;
+    }
+    catch(PDOException $e)
+    {
+        print 'Exception : '.$e->getMessage();
+    }
+
+
+
+    /*
     $db = new SQLiteDatabase('zipcodes.db');
     $result = $db->query("SELECT country,state,city FROM zipcodes WHERE zipcode='$zip' LIMIT 1");
     
@@ -122,7 +144,7 @@ $app->get('/:zip', function ($zip) {
     else
     {
         echo json_encode($info);
-    }
+    }*/
 });
 
 
