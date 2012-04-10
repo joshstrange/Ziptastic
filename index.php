@@ -123,7 +123,8 @@ $app->get('/:zip', function ($zip) {
         $db = new PDO('sqlite:zipcodes.db');
 
         $result = $db->query("SELECT country,state,city FROM zipcodes WHERE zipcode='$zip' LIMIT 1");
-        if($info = $result->fetch(PDO::FETCH_ASSOC))
+        $info = $result->fetch(PDO::FETCH_ASSOC);
+        if(!$info)
             die(json_encode(array('error' => 'Zip Code not found!')));
         else
         {
