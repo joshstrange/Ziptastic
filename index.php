@@ -129,6 +129,7 @@ $app->get('/:zip', function ($zip) {
             die(json_encode(array('error' => 'Zip Code not found!')));
         else
         {
+            $db->query("UPDATE zipcodes SET fetches=fetches+1 WHERE zipcode='$zip'");
             echo json_encode($info);
         }
         // close the database connection
