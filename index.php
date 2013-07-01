@@ -114,7 +114,10 @@ EOT;
 //Zip route
 $app->get('/:zip', function ($zip) {
     if(!is_numeric($zip))
+    {
         die(json_encode(array('error' => 'Not a valid Zip Code!')));
+    }
+
 
 
 
@@ -126,11 +129,30 @@ $app->get('/:zip', function ($zip) {
         $result = $db->query("SELECT country,state,city FROM zipcodes WHERE zipcode='$zip' LIMIT 1");
         $info = $result->fetch(PDO::FETCH_ASSOC);
         if(!$info)
-            die(json_encode(array('error' => 'Zip Code not found!')));
+        {
+            $response = array('error' => 'Zip Code not found!');
+            if(isset($_GET['callback']) && !empty($_GET['callback']))
+            {
+                  die($_GET['callback'].'('.json_encode($response).')');
+            }
+            else
+            {
+               die(json_encode($response));
+            }
+
+        }
         else
         {
             $db->query("UPDATE zipcodes SET fetches=fetches+1 WHERE zipcode='$zip'");
-            echo json_encode($info);
+            if(isset($_GET['callback']) && !empty($_GET['callback']))
+            {
+                echo $_GET['callback'].'('.json_encode($info).')';
+            }
+            else
+            {
+                echo json_encode($info);
+            }
+
         }
         // close the database connection
         $db = NULL;
@@ -145,7 +167,7 @@ $app->get('/:zip', function ($zip) {
     /*
     $db = new SQLiteDatabase('zipcodes.db');
     $result = $db->query("SELECT country,state,city FROM zipcodes WHERE zipcode='$zip' LIMIT 1");
-    
+
     if($info = sqlite_fetch_array($result))
         die(json_encode(array('error' => 'Zip Code not found!')));
     else
