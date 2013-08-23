@@ -1,7 +1,7 @@
 # Ziptastic API
 
 ## How to use
-* Step 1: Make an API call to http://ZiptasticAPI.com/[ZIP CODE]
+* Step 1: Make an API call to http://ZiptasticAPI.com/ZIPCODE OR http://ZiptasticAPI.com/ZIPCODE?callback=myCallback
 * Step 2: Get response from server
 * Step 3: ????
 * Step 4: PROFIT!!! (But really it's just that easy)
