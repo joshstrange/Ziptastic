@@ -99,7 +99,7 @@ $app->get('/', function () {
             <section>
                 <h2>Get Started</h2>
                 <ol>
-                    <li>Step 1: Make an API call to http://ZiptasticAPI.com/[ZIP CODE]</li>
+                    <li>Step 1: Make an API call to  http://ZiptasticAPI.com/ZIPCODE OR http://ZiptasticAPI.com/ZIPCODE?callback=myCallback</li>
                     <li>Step 2: Get response from server</li>
                     <li>Step 3: ????</li>
                     <li>Step 4: PROFIT!!! (But really it's just that easy)</li>
@@ -115,7 +115,15 @@ EOT;
 $app->get('/:zip', function ($zip) {
     if(!is_numeric($zip))
     {
-        die(json_encode(array('error' => 'Not a valid Zip Code!')));
+        if(isset($_GET['callback']) && !empty($_GET['callback']))
+        {
+            die($_GET['callback'].'('.json_encode($info).')');
+        }
+        else
+        {
+            die(json_encode(array('error' => 'Not a valid Zip Code!')));
+        }
+        
     }
 
 
