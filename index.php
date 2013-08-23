@@ -117,7 +117,7 @@ $app->get('/:zip', function ($zip) {
     {
         if(isset($_GET['callback']) && !empty($_GET['callback']))
         {
-            die($_GET['callback'].'('.json_encode($info).')');
+            die($_GET['callback'].'('.json_encode(array('error' => 'Not a valid Zip Code!')).')');
         }
         else
         {
