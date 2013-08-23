@@ -37,7 +37,7 @@ $app = new Slim();
  */
 
 //Enable CORS
-$app->response->headers->set('Access-Control-Allow-Origin', '*');
+header('Access-Control-Allow-Origin: *');
 
 //GET route
 $app->get('/', function () {
