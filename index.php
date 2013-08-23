@@ -36,6 +36,9 @@ $app = new Slim();
  * The routes below work with PHP >= 5.3.
  */
 
+//Enable CORS
+$app->response->headers->set('Access-Control-Allow-Origin', '*');
+
 //GET route
 $app->get('/', function () {
     $template = <<<EOT
