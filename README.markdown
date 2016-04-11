@@ -1,3 +1,7 @@
+# NOT SUPPORTED
+### This repo and the URL below are not being supported or updated going forward, the live API instance was only ever meant as a demo/proof of concept and not meant to be use in production (as it is currently being used). Despite this fact the last time I checked there are about 4.5M API calls being made every month. I have no desire to keep this updated or attempt to monetize the code/service and I don't ever want to attempt to transfer the code/URL to someone else as this is really nothing more than a tiny amount of code in front of a SQLite DB. Honestly it could be done in less than 30 lines of code.
+
+
 # Ziptastic API
 
 ## How to use
