@@ -97,7 +97,7 @@ $app->get('/', function () {
             </header>
             <h1>Ziptastic API</h1>
             <p>
-                Ziptastic API is a super easy to use API that returns the Country, State, City of the ip code you supply. The Ziptastic API was created by <a href="http://github.com/daspecster">Thomas Schultz</a> and then I (<a href="http://github.com/joshstrange">Josh Strange</a>) re-wrote parts of it in PHP using the <a href="http://www.slimframework.com/">SLIM framework</a> and hosted it here.
+                Ziptastic API is a super easy to use API that returns the Country, State, City of the zip code you supply. The Ziptastic API was created by <a href="http://github.com/daspecster">Thomas Schultz</a> and then I (<a href="http://github.com/joshstrange">Josh Strange</a>) re-wrote parts of it in PHP using the <a href="http://www.slimframework.com/">SLIM framework</a> and hosted it here.
             </p>
             <section>
                 <h2>Get Started</h2>
