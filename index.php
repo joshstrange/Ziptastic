@@ -166,7 +166,7 @@ $app->get('/:zip', function ($zip) {
 
         }
         // close the database connection
-        $db = NULL;
+        $db = null;
     }
     catch(PDOException $e)
     {
