@@ -1,0 +1,14 @@
+// Ziptastic API on Cloudflare Workers. public/ holds the landing page's logo (served free as a
+// static asset); every other request runs worker/index.js.
+// Custom domains (ziptasticapi.com, www) are attached in the dashboard at cutover, not here,
+// so a deploy can never take over DNS by accident.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "ziptastic",
+  "main": "worker/index.js",
+  "compatibility_date": "2026-09-01",
+  "assets": { "directory": "./public" },
+  // Logs for 1 request in 10: plenty to debug with, and keeps a busy month well inside the
+  // Workers Paid log allowance.
+  "observability": { "enabled": true, "head_sampling_rate": 0.1 }
+}

@@ -21,3 +21,16 @@ Ziptastic API is a super easy to use API that returns the Country, State, City o
 ## About the Author
 
 My name is [Josh Strange](http://joshstrange.com) and I am a web and mobile developer living in Lexington, KY. 
+
+## How it runs
+
+Since 2026 the API is a Cloudflare Worker (`worker/index.js`), replacing the original PHP/Slim app on DreamHost. It answers exactly as the PHP did, byte for byte, including JSONP, CORS, PHP-style escaped slashes, and `{"error": ...}` bodies with HTTP 200.
+
+* `zipcodes.db` is the data (SQLite). `python3 tools/build_data.py` regenerates `worker/zips.js` from it, which is the whole table embedded in the Worker.
+* `node tools/compare_live.mjs [base-url]` checks a set of edge cases against a running instance.
+* `npx wrangler deploy` publishes it.
+
+Two deliberate differences:
+
+* A JSONP `callback` must now be a plain JavaScript name (`jQuery123_456`, `app.cb[0]`). The PHP echoed anything back, which made it a reflected XSS hole.
+* Lookups are sent with `Cache-Control: max-age=86400` (was 600), so browsers reuse answers for a day.

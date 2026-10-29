@@ -1,47 +1,3 @@
-<?php
-
-/**
- * Step 1: Require the Slim PHP 5 Framework
- *
- * If using the default file layout, the `Slim/` directory
- * will already be on your include path. If you move the `Slim/`
- * directory elsewhere, ensure that it is added to your include path
- * or update this file path as needed.
- */
-require 'Slim/Slim.php';
-
-/**
- * Step 2: Instantiate the Slim application
- *
- * Here we instantiate the Slim application with its default settings.
- * However, we could also pass a key-value array of settings.
- * Refer to the online documentation for available settings.
- */
-$app = new Slim();
-
-/**
- * Step 3: Define the Slim application routes
- *
- * Here we define several Slim application routes that respond
- * to appropriate HTTP request methods. In this example, the second
- * argument for `Slim::get`, `Slim::post`, `Slim::put`, and `Slim::delete`
- * is an anonymous function. If you are using PHP < 5.3, the
- * second argument should be any variable that returns `true` for
- * `is_callable()`. An example GET route for PHP < 5.3 is:
- *
- * $app = new Slim();
- * $app->get('/hello/:name', 'myFunction');
- * function myFunction($name) { echo "Hello, $name"; }
- *
- * The routes below work with PHP >= 5.3.
- */
-
-//Enable CORS
-header('Access-Control-Allow-Origin: *');
-
-//GET route
-$app->get('/', function () {
-    $template = <<<EOT
 <!DOCTYPE html>
     <html>
         <head>
@@ -93,7 +49,7 @@ $app->get('/', function () {
         <body>
         <a href="https://github.com/joshstrange/Ziptastic"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://a248.e.akamai.net/assets.github.com/img/71eeaab9d563c2b3c590319b398dd35683265e85/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub"></a>
             <header>
-                <a href="http://www.slimframework.com">Built With <img src="logo.png" alt="Slim"/></a>
+                <a href="http://www.slimframework.com">Built With <img src="/logo.png" alt="Slim"/></a>
             </header>
             <h1>Ziptastic API</h1>
             <p>
@@ -110,88 +66,3 @@ $app->get('/', function () {
             </section>
         </body>
     </html>
-EOT;
-    echo $template;
-});
-
-//Zip route
-$app->get('/:zip', function ($zip) {
-    if(!is_numeric($zip))
-    {
-        if(isset($_GET['callback']) && !empty($_GET['callback']))
-        {
-            die($_GET['callback'].'('.json_encode(array('error' => 'Not a valid Zip Code!')).')');
-        }
-        else
-        {
-            die(json_encode(array('error' => 'Not a valid Zip Code!')));
-        }
-        
-    }
-
-
-
-
-    try
-    {
-        //open the database
-        $db = new PDO('sqlite:zipcodes.db');
-
-        $result = $db->query("SELECT country,state,city FROM zipcodes WHERE zipcode='$zip' LIMIT 1");
-        $info = $result->fetch(PDO::FETCH_ASSOC);
-        if(!$info)
-        {
-            $response = array('error' => 'Zip Code not found!');
-            if(isset($_GET['callback']) && !empty($_GET['callback']))
-            {
-                  die($_GET['callback'].'('.json_encode($response).')');
-            }
-            else
-            {
-               die(json_encode($response));
-            }
-
-        }
-        else
-        {
-            $db->query("UPDATE zipcodes SET fetches=fetches+1 WHERE zipcode='$zip'");
-            if(isset($_GET['callback']) && !empty($_GET['callback']))
-            {
-                echo $_GET['callback'].'('.json_encode($info).')';
-            }
-            else
-            {
-                echo json_encode($info);
-            }
-
-        }
-        // close the database connection
-        $db = NULL;
-    }
-    catch(PDOException $e)
-    {
-        print 'Exception : '.$e->getMessage();
-    }
-
-
-
-    /*
-    $db = new SQLiteDatabase('zipcodes.db');
-    $result = $db->query("SELECT country,state,city FROM zipcodes WHERE zipcode='$zip' LIMIT 1");
-
-    if($info = sqlite_fetch_array($result))
-        die(json_encode(array('error' => 'Zip Code not found!')));
-    else
-    {
-        echo json_encode($info);
-    }*/
-});
-
-
-/**
- * Step 4: Run the Slim application
- *
- * This method should be called last. This is responsible for executing
- * the Slim application using the settings and routes defined above.
- */
-$app->run();
